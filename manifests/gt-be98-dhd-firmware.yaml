@@ -15,7 +15,7 @@ source_paths:
 # Hosting: a GitHub Release asset on this repo (fetched by the Buildroot recipe).
 release_tag: dhd-firmware-1.0
 asset:       gt-be98-dhd-firmware-1.0.tar.gz
-sha256:      062e40378b78686a2d823b835f7fe394d2788ad88e3fc763c1ec8c0a3a0d80b1   # 4.5M tarball
+sha256:      5297bd63bab3189fc48b85b1179f0936432952b22a23740d24b3116f852448f5   # 4.5M tarball (reproducible)
 
 # Consumed by Buildroot recipe:
 #   gt-be98-buildroot/package/gt-be98-dhd-firmware/

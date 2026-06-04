@@ -48,7 +48,11 @@ for p in "${PATHS[@]}"; do
 done
 
 TARBALL="${OUT_DIR}/${ASSET}"
-tar -C "$STAGE" -czf "$TARBALL" .
+# Reproducible tarball: fixed mtime/owner and sorted names + gzip -n (no name/
+# timestamp) so the sha256 is stable across machines and matches the committed
+# recipe hash. (Requires GNU tar.)
+tar --sort=name --mtime='@0' --owner=0 --group=0 --numeric-owner \
+    -C "$STAGE" -cf - . | gzip -n > "$TARBALL"
 SHA="$(sha256sum "$TARBALL" | cut -d' ' -f1)"
 
 echo
