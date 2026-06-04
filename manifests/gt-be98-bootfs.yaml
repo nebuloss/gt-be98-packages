@@ -1,0 +1,16 @@
+# Prebuilt GT-BE98 bootfs FIT (.itb): ATF + U-Boot + aarch64 kernel(lzo) +
+# per-board DTBs + OP-TEE. This is the boot chain Buildroot reuses (Step 2a)
+# instead of building the kernel/bootloader from source (Step 2b deferred).
+# post-image.sh wraps Buildroot's rootfs.squashfs around this into the .pkgtb.
+package:      gt-be98-bootfs
+version:      "1.0"
+description:  Prebuilt GT-BE98 bootfs .itb (ATF+U-Boot+aarch64 kernel+dtbs+OP-TEE)
+license:      PROPRIETARY
+redistribute: false
+
+source_paths:
+  - vendor/asuswrt-merlin.ng/release/src-rt-5.04behnd.4916/targets/96813GW/bcm96813GW_uboot_linux.itb
+
+release_tag: bootfs-1.0
+asset:       gt-be98-bootfs-1.0.tar.gz
+sha256:      80f9d2ada420cee1c1c025de7f668136b122b51af2d294860c1edd25aea6c208

@@ -1,0 +1,20 @@
+# ASUS Samba (smbd/nmbd) for GT-BE98. samba_multicall is a self-contained
+# multicall binary (only glibc deps — no ASUS lib closure); smbd/nmbd/smbpasswd
+# are symlinks to it. Upstream samba4 can't be built with the gcc-10.3 toolchain
+# (cmocka needs GCC 11+), so use the prebuilt ASUS blob.
+package:      gt-be98-samba
+version:      "1.0"
+description:  ASUS Samba server (smbd/nmbd via samba_multicall) for GT-BE98
+license:      PROPRIETARY
+redistribute: false
+
+source_paths:
+  - vendor/asuswrt-merlin.ng/release/src-rt-5.04behnd.4916/targets/96813GW/fs.install/usr/sbin/samba_multicall
+  - vendor/asuswrt-merlin.ng/release/src-rt-5.04behnd.4916/targets/96813GW/fs.install/usr/sbin/smbd
+  - vendor/asuswrt-merlin.ng/release/src-rt-5.04behnd.4916/targets/96813GW/fs.install/usr/sbin/nmbd
+  - vendor/asuswrt-merlin.ng/release/src-rt-5.04behnd.4916/targets/96813GW/fs.install/usr/sbin/smbpasswd
+  - vendor/asuswrt-merlin.ng/release/src-rt-5.04behnd.4916/targets/96813GW/fs.install/sbin/write_smb_conf
+
+release_tag: samba-1.0
+asset:       gt-be98-samba-1.0.tar.gz
+sha256:      4882af0d889c6ae8e9e2ac41dd98c7e1a21d9be9c016e4b970bb68e440daddb5
