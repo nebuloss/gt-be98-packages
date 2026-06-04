@@ -1,0 +1,21 @@
+# Example manifest — Broadcom dhd wireless firmware for GT-BE98.
+# One manifest per custom/proprietary package. Describes what the blob is, where
+# it comes from in a gt-be98-firmware build, and where its tarball is hosted.
+package:      gt-be98-dhd-firmware
+version:      "1.0"
+description:  Broadcom dhd wireless firmware (rtecdc.bin) for GT-BE98 radios 6717a0 + 6726b0
+license:      PROPRIETARY
+redistribute: false
+
+# Source: paths inside a built gt-be98-firmware tree (relative to its root).
+# scripts/package-blob.sh tars these into the asset below.
+source_paths:
+  - vendor/asuswrt-merlin.ng/release/src-rt-5.04behnd.4916/targets/96813GW/fs.install/rom/etc/wlan/dhd
+
+# Hosting: a GitHub Release asset on this repo (fetched by the Buildroot recipe).
+release_tag: dhd-firmware-1.0
+asset:       gt-be98-dhd-firmware-1.0.tar.gz
+sha256:      TBD   # filled in by scripts/package-blob.sh after packaging
+
+# Consumed by Buildroot recipe:
+#   gt-be98-buildroot/package/gt-be98-dhd-firmware/
