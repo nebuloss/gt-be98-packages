@@ -1,0 +1,20 @@
+# The complete, FINAL ASUS GT-BE98 root filesystem image (merlin's built
+# rootfs.img: a v4 xz squashfs, all-root). This is the exact rootfs the stock/
+# merlin firmware flashes and boots — the full proprietary userspace (rc/cfg_server
+# engine, wl/dhd, hostapd, /www) AFTER merlin's buildFS post-processing (lib
+# flattening, mount dirs, dev nodes). Buildroot bundles it verbatim into the
+# .pkgtb so the flashed image is content-identical to a working merlin build
+# (network + SSH restored from persistent nvram + /jffs). The proprietary engine
+# can't be rebuilt from source; raw fs.install isn't equivalent (pre-processing).
+package:      gt-be98-rootfs
+version:      "1.0"
+description:  Final ASUS GT-BE98 rootfs.img (built squashfs, content-identical to merlin) for the working-firmware build
+license:      PROPRIETARY
+redistribute: false
+
+source_paths:
+  - vendor/asuswrt-merlin.ng/release/src-rt-5.04behnd.4916/targets/96813GW/rootfs.img
+
+release_tag: rootfs-1.0
+asset:       gt-be98-rootfs-1.0.tar.gz
+sha256:      1eea37fc583729ee7d0f33ac9d831f257029bda418b011801152464f411555a7
