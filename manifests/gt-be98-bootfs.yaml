@@ -2,15 +2,26 @@
 # per-board DTBs + OP-TEE. This is the boot chain Buildroot reuses (Step 2a)
 # instead of building the kernel/bootloader from source (Step 2b deferred).
 # post-image.sh wraps Buildroot's rootfs.squashfs around this into the .pkgtb.
+#
+# Version 0031: extracted from the VALIDATED artifact
+# gt-be98-firmware/artifacts-0031/GT-BE98_3006_102.6_0_nand_squashfs.pkgtb
+# (sha256 a7dcd0c14669eb363be775fc208f1f73098226723e420a3e3408095b1e98fa01 — the
+# image flashed and running on the device), NOT from a loose vendor-tree .itb.
+# Embedded bootfs sha256:
+# 81f38fe09f602c15cd6d0625cf779f317129c25702ef8b338baeef29d23dec73.
+#
+# Repackage:
+#   scripts/extract-pkgtb.sh ../gt-be98-firmware/artifacts-0031/GT-BE98_3006_102.6_0_nand_squashfs.pkgtb /tmp/pkgtb-0031/artifacts-0031
+#   scripts/package-blob.sh manifests/gt-be98-bootfs.yaml /tmp/pkgtb-0031
 package:      gt-be98-bootfs
-version:      "1.0"
-description:  Prebuilt GT-BE98 bootfs .itb (ATF+U-Boot+aarch64 kernel+dtbs+OP-TEE)
+version:      "0031"
+description:  Prebuilt GT-BE98 bootfs .itb (ATF+U-Boot+aarch64 kernel+dtbs+OP-TEE), from the validated 0031 pkgtb
 license:      PROPRIETARY
 redistribute: false
 
 source_paths:
-  - vendor/asuswrt-merlin.ng/release/src-rt-5.04behnd.4916/targets/96813GW/bcm96813GW_uboot_linux.itb
+  - artifacts-0031/bcm96813GW_uboot_linux.itb
 
-release_tag: bootfs-1.0
-asset:       gt-be98-bootfs-1.0.tar.gz
-sha256:      80f9d2ada420cee1c1c025de7f668136b122b51af2d294860c1edd25aea6c208
+release_tag: bootfs-0031
+asset:       gt-be98-bootfs-0031.tar.gz
+sha256:      957671977c2f93bb51d045473219fba08cb1375ea41e0700dd3e6cb6bf776560
