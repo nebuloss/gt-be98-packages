@@ -3,31 +3,56 @@
 # post-processing. Buildroot bundles it (after the in-repo transform) into the
 # .pkgtb. The proprietary engine can't be rebuilt from source.
 #
-# Version 0034: the Phase-2b blob set, built from scratch (./build.sh clean,
-# 2026-06-06) carrying patches 0024-0031 + 0033 + 0034 (0032 deliberately
-# EXCLUDED — banned envrams-wrapper design) on pinned upstream
+# Version 0035: the gate to the open-wifi-sole-supervisor OS. blob-0034 lineage
+# (patches 0024-0031 + 0033 + 0034; 0032 still EXCLUDED — banned envrams-wrapper)
+# PLUS:
+#   - patch 0035 (watchdog gate): nvram gtbe98_wifi_extsup folded into the
+#     debug_monitor respawn condition in watchdog() (rc/watchdog.c). Default-OFF
+#     (absent/0 = stock verbatim). =1 → the watchdog stops respawning
+#     debug_monitor, leaving the webui-go controller the sole hostapd supervisor.
+#     Companion of webui_radio_init=1. Ships DORMANT.
+#   - patch 0029 tighter re-apply: the wlc_nt_enable gate now lands ONLY in
+#     start_wlc_nt() (services.c). blob 0034's fuzzy apply mis-landed it in the
+#     near-twin start_wlceventd()/start_wlc_monitor() too, breaking wlceventd at
+#     first boot (br-0049 carried a committed nvram wlc_nt_enable=1 crutch). The
+#     0035 image boots wlceventd cleanly with NO nvram workaround.
+# Built ./build.sh clean 2026-06-07 on pinned upstream
 # ad42d5e81a53bc20e6d583f1b8e1748d09f964c8. Sourced from
-# gt-be98-firmware/artifacts-0034/rootfs.img, byte-identical to the squashfs
-# embedded in artifacts-0034/GT-BE98_3006_102.6_0_nand_squashfs.pkgtb (sha256
-# 1711c65e3f8627791104007ef2aa9303620ea23b2e6b2ace8173dd4639667825 — verified
-# via dumpimage FIT hash). Embedded rootfs sha256:
-# 76d4ad9e307383a323ce3f01f0e0d7ba83023bd01ecfb3c25d68e456926935cf.
+# gt-be98-firmware/artifacts-0035/rootfs.img — sha256
+# c9d4e776a63ad245b35d46567e5382c35d3b786112db848d07a93ce8f7abb1b6 (transform
+# input). Firmware-standalone update bundle
+# artifacts-0035/GT-BE98_3006_102.6_0_nand_squashfs.pkgtb sha256
+# 2656bd7d28280a15f7ba13114418539cea8b9dae0c69f598fc2e176b150f26e0.
 #
-# NOTE: the gtbe98_httpd (0033) and gtbe98_sched_daemon (0034) gates are
-# default-OFF in this blob — the stock :80 web UI does NOT start. Intended
-# input for the buildroot transform once the open webui owns the UI (P2-5/P2-6).
+# Flashable buildroot image (br-0049 boot chain, bootfs_blob=0031): br-0050,
+# ~/be98/artifacts-br/GT-BE98_blob0035_nand_squashfs.pkgtb sha256
+# 9a723b5aa889875f0ce3f54c5a4a2f2dd3a499bb2124d6727e82c0229cab791d (83,223,240 B);
+# embedded rootfs.squashfs 69,894,144 B (1.16 MB under the slot-2 ceiling
+# 71,106,560). TRIALED + PASSED (gate 19/0, 3-min soak), watchdog gate
+# live-validated, committed slot 2 → supersedes br-0049 as the baseline.
+#
+# NOTE: the gtbe98_httpd (0033) and gtbe98_sched_daemon (0034) gates AND the new
+# gtbe98_wifi_extsup (0035) watchdog gate are all default-OFF in this blob — the
+# stock :80 web UI does NOT start and wifi supervision is unchanged until the open
+# webui owns management. Input for the buildroot transform.
+#
+# PUBLISH STATUS: GitHub release rootfs-0035 NOT yet published — the operator owns
+# the outward release. The sha256 below is the reproducible release-asset tar
+# (scripts/package-blob.sh: --sort=name --mtime=@0 + gzip -n), matches the
+# gt-be98-buildroot package .hash (5a28121), and is verifiable offline before the
+# release is cut.
 #
 # Repackage:
 #   scripts/package-blob.sh <this manifest> ../gt-be98-firmware
 package:      gt-be98-rootfs
-version:      "0034"
-description:  Phase-2b ASUS GT-BE98 rootfs squashfs (patches 0024-0031+0033+0034, httpd/sched gates default-OFF)
+version:      "0035"
+description:  ASUS GT-BE98 rootfs squashfs (patches 0024-0031+0033+0034+0035, 0032 excluded; httpd/sched/wifi-extsup gates default-OFF)
 license:      PROPRIETARY
 redistribute: false
 
 source_paths:
-  - artifacts-0034/rootfs.img
+  - artifacts-0035/rootfs.img
 
-release_tag: rootfs-0034
-asset:       gt-be98-rootfs-0034.tar.gz
-sha256:      8b9dcf7fc621851ab9eb40d5dabe9104aa0941d1abe090094cc50bec25437fc0
+release_tag: rootfs-0035
+asset:       gt-be98-rootfs-0035.tar.gz
+sha256:      8da2951a72d6837a6dcebc0fff25c5540d70f00a089eb7fcf2190b1c1129d489
