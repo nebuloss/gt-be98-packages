@@ -1,30 +1,33 @@
 # The complete, FINAL ASUS GT-BE98 root filesystem image (a v4 xz squashfs,
-# 128K blocks, all-root): the full proprietary userspace (rc/cfg_server engine,
-# wl/dhd, hostapd, /www) AFTER merlin's buildFS post-processing (lib flattening,
-# mount dirs, dev nodes). Buildroot bundles it verbatim into the .pkgtb so the
-# flashed image is content-identical to a working merlin build (network + SSH
-# restored from persistent nvram + /jffs). The proprietary engine can't be
-# rebuilt from source; raw fs.install isn't equivalent (pre-processing).
+# 128K blocks, all-root): the full proprietary userspace AFTER merlin's buildFS
+# post-processing. Buildroot bundles it (after the in-repo transform) into the
+# .pkgtb. The proprietary engine can't be rebuilt from source.
 #
-# Version 0031: extracted from the VALIDATED artifact
-# gt-be98-firmware/artifacts-0031/GT-BE98_3006_102.6_0_nand_squashfs.pkgtb
-# (sha256 a7dcd0c14669eb363be775fc208f1f73098226723e420a3e3408095b1e98fa01 — the
-# image flashed and running on the device, patches 0001-0031), NOT from a loose
-# vendor-tree rootfs.img (which drifts as later patches are built). Embedded
-# rootfs sha256: dfbf98b4d3a474887ad029e9e6347da081f013e615a607f4f083bb2f3ab28d2c.
+# Version 0034: the Phase-2b blob set, built from scratch (./build.sh clean,
+# 2026-06-06) carrying patches 0024-0031 + 0033 + 0034 (0032 deliberately
+# EXCLUDED — banned envrams-wrapper design) on pinned upstream
+# ad42d5e81a53bc20e6d583f1b8e1748d09f964c8. Sourced from
+# gt-be98-firmware/artifacts-0034/rootfs.img, byte-identical to the squashfs
+# embedded in artifacts-0034/GT-BE98_3006_102.6_0_nand_squashfs.pkgtb (sha256
+# 1711c65e3f8627791104007ef2aa9303620ea23b2e6b2ace8173dd4639667825 — verified
+# via dumpimage FIT hash). Embedded rootfs sha256:
+# 76d4ad9e307383a323ce3f01f0e0d7ba83023bd01ecfb3c25d68e456926935cf.
+#
+# NOTE: the gtbe98_httpd (0033) and gtbe98_sched_daemon (0034) gates are
+# default-OFF in this blob — the stock :80 web UI does NOT start. Intended
+# input for the buildroot transform once the open webui owns the UI (P2-5/P2-6).
 #
 # Repackage:
-#   scripts/extract-pkgtb.sh ../gt-be98-firmware/artifacts-0031/GT-BE98_3006_102.6_0_nand_squashfs.pkgtb /tmp/pkgtb-0031/artifacts-0031
-#   scripts/package-blob.sh manifests/gt-be98-rootfs.yaml /tmp/pkgtb-0031
+#   scripts/package-blob.sh <this manifest> ../gt-be98-firmware
 package:      gt-be98-rootfs
-version:      "0031"
-description:  Final ASUS GT-BE98 rootfs squashfs, extracted from the validated 0031 pkgtb
+version:      "0034"
+description:  Phase-2b ASUS GT-BE98 rootfs squashfs (patches 0024-0031+0033+0034, httpd/sched gates default-OFF)
 license:      PROPRIETARY
 redistribute: false
 
 source_paths:
-  - artifacts-0031/rootfs.img
+  - artifacts-0034/rootfs.img
 
-release_tag: rootfs-0031
-asset:       gt-be98-rootfs-0031.tar.gz
-sha256:      26fa4540015346484e89d355a4fa608dce05b5085a657cf55d4c7dfab4754d5b
+release_tag: rootfs-0034
+asset:       gt-be98-rootfs-0034.tar.gz
+sha256:      8b9dcf7fc621851ab9eb40d5dabe9104aa0941d1abe090094cc50bec25437fc0
