@@ -5,7 +5,8 @@ GT-BE98 Buildroot build needs but can't fetch from any public upstream — Broad
 wireless firmware (`rtecdc.bin`), the `wl`/`dhd` drivers, the asus `httpd` +
 prebuilt `web-broadcom_private.o`, nvram defaults, bootloader bits, etc.
 
-Part of the GT-BE98 repo family (see **[ARCHITECTURE.md](ARCHITECTURE.md)**):
+Part of the GT-BE98 repo family (canonical architecture/migration plan lives in
+**`gt-be98-buildroot/ARCHITECTURE.md`**):
 
 | Repo | Role |
 |------|------|

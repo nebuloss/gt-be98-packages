@@ -1,7 +1,7 @@
 # Agent handoff — gt-be98-packages
 
 You're working in the **proprietary source/blob hosting** repo for the GT-BE98
-Buildroot build. Read `ARCHITECTURE.md` first.
+Buildroot build. Read `gt-be98-buildroot/ARCHITECTURE.md` first (canonical copy).
 
 ## State (2026-06-04)
 
