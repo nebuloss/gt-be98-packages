@@ -24,4 +24,4 @@ exclude_paths:
 
 release_tag: bcm-datapath-1.0
 asset:       gt-be98-bcm-datapath-1.0.tar.gz
-sha256:      TBD
+sha256:      8542915de37894b766eda68fb834a295bbdf0a791e6fb8128e3d8cfd6808129c
