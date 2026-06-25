@@ -9,8 +9,10 @@
 #                  (default: ../gt-be98-firmware)
 #   OUT_DIR        where to write the tarball (default: ./output)
 #
-# Reads `source_paths:`, `asset:` and `sha256:` keys from the manifest (simple
-# line grep — no YAML lib). Prints the sha256 to paste back into the manifest.
+# Reads `source_paths:`, optional `exclude_paths:`, `asset:` and `sha256:` keys
+# from the manifest (simple line grep — no YAML lib). exclude_paths are removed
+# from the staged tree after copying (e.g. drop a large owned-elsewhere subdir).
+# Prints the sha256 to paste back into the manifest.
 set -euo pipefail
 
 MANIFEST="${1:?usage: package-blob.sh manifests/<pkg>.yaml [FIRMWARE_ROOT] [OUT_DIR]}"
@@ -31,6 +33,13 @@ mapfile -t PATHS < <(awk '
 ' "$MANIFEST")
 [[ ${#PATHS[@]} -gt 0 ]] || { echo "ERROR: no source_paths in manifest" >&2; exit 1; }
 
+# Collect optional exclude_paths (same grammar; removed from the stage post-copy).
+mapfile -t EXCLUDES < <(awk '
+    /^exclude_paths:/ {grab=1; next}
+    grab && /^[[:space:]]*-[[:space:]]/ {sub(/^[[:space:]]*-[[:space:]]*/,""); print; next}
+    grab && /^[^[:space:]-]/ {grab=0}
+' "$MANIFEST")
+
 mkdir -p "$OUT_DIR"
 STAGE="$(mktemp -d)"; trap 'rm -rf "$STAGE"' EXIT
 
@@ -45,6 +54,16 @@ for p in "${PATHS[@]}"; do
     echo "  + $p"
     mkdir -p "${STAGE}/$(dirname "$p")"
     cp -a "$src" "${STAGE}/${p}"
+done
+
+for e in "${EXCLUDES[@]:-}"; do
+    [[ -n "$e" ]] || continue
+    if [[ ! -e "${STAGE}/${e}" ]]; then
+        echo "ERROR: exclude_path not present in staged tree: $e" >&2
+        exit 1
+    fi
+    echo "  - exclude $e"
+    rm -rf "${STAGE:?}/${e}"
 done
 
 TARBALL="${OUT_DIR}/${ASSET}"

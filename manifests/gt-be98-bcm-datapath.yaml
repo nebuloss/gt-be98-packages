@@ -1,0 +1,27 @@
+# Closed Broadcom datapath bring-up for GT-BE98: the kernel-module set
+# (/lib/modules/4.19.294 — the BCM_KF datapath .ko + wl/dhd), the bcm_boot_launcher
+# ELF, and the /rom/etc early-init tree (rc3.d symlinks -> init.d/*.sh, rdpa_init.sh,
+# make_static_devnodes.sh, fstab, modprobe.conf, sf2/vlan/soft_bridge, ...). This is
+# what a fully-generated (gt-be98_defconfig) rootfs needs to actually bring up the
+# HW datapath + network at boot; userspace (rc/nvram/libs) is gt-be98-userspace-base.
+#
+# Excludes /rom/etc/wlan (11M wifi firmware — owned by gt-be98-dhd-firmware) and
+# /rom/etc/adsl1 (DSL, irrelevant to this router).
+package:      gt-be98-bcm-datapath
+version:      "1.0"
+description:  Closed Broadcom datapath kernel modules + bcm_boot_launcher + /rom/etc early-init for GT-BE98
+license:      PROPRIETARY
+redistribute: false
+
+source_paths:
+  - vendor/asuswrt-merlin.ng/release/src-rt-5.04behnd.4916/targets/96813GW/fs/lib/modules/4.19.294
+  - vendor/asuswrt-merlin.ng/release/src-rt-5.04behnd.4916/targets/96813GW/fs/bin/bcm_boot_launcher
+  - vendor/asuswrt-merlin.ng/release/src-rt-5.04behnd.4916/targets/96813GW/fs/rom/etc
+
+exclude_paths:
+  - vendor/asuswrt-merlin.ng/release/src-rt-5.04behnd.4916/targets/96813GW/fs/rom/etc/wlan
+  - vendor/asuswrt-merlin.ng/release/src-rt-5.04behnd.4916/targets/96813GW/fs/rom/etc/adsl1
+
+release_tag: bcm-datapath-1.0
+asset:       gt-be98-bcm-datapath-1.0.tar.gz
+sha256:      TBD
